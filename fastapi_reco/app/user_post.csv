@@ -1,0 +1,14 @@
+user_email,post_id,prefer
+alice@example.com,101,1
+alice@example.com,102,1
+alice@example.com,103,1
+bob@example.com,101,1
+bob@example.com,103,1
+bob@example.com,104,1
+bob@example.com,108,1
+bob@example.com,109,1
+carol@example.com,104,1
+carol@example.com,106,1
+carol@example.com,108,1
+carol@example.com,109,1
+carol@example.com,110,1
