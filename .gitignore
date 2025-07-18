@@ -1,0 +1,34 @@
+# Ignore all CSV files
+*.csv
+
+# Recommended ignores for Python projects
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
