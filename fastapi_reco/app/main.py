@@ -1,30 +1,25 @@
 from fastapi import FastAPI, Query
-from app.recommender_content import ContentRecommender
-from app.recommender_als import ALSRecommender
-from app.logger import save_log
+from typing import List
+from pydantic import BaseModel
 
-app = FastAPI()  # ✅ 반드시 필요!
+from recommender.als import ALSRecommender
+from recommender.content import ContentRecommender
+from recommender.hybrid import hybrid_recommend
 
-content_model = ContentRecommender()
-als_model = ALSRecommender()
+app = FastAPI()
 
-@app.get("/recommend/hybrid")
-def hybrid_recommend(user_id: int = Query(...), post_id: int = Query(...), top_k: int = 5):
-    als_result = als_model.recommend(user_id, top_k)
-    content_result = content_model.recommend(post_id, top_k)
+als_model = ALSRecommender(csv_path="mock_data/user_post.csv")
+content_model = ContentRecommender(csv_path="mock_data/post_tags.csv")
 
-    result = {
-        "recommendations": {
-            "for_you": als_result,
-            "similar_to_this": content_result
-        }
-    }
+class RecommendationResult(BaseModel):
+    post_id: int
+    score: float
+    reason: str
 
-    save_log({
-        "user_id": user_id,
-        "post_id": post_id,
-        "top_k": top_k,
-        "result": result
-    })
-
-    return result
+@app.get("/recommend", response_model=List[RecommendationResult])
+def recommend(user_email: str = Query(...), top_k: int = Query(5)):
+    try:
+        results = hybrid_recommend(user_email, als_model, content_model, top_k=top_k)
+        return results
+    except Exception as e:
+        return []
